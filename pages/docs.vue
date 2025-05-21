@@ -159,7 +159,7 @@ INSERT INTO users (username, email) VALUES (:username, :email)</pre
 
           <div class="footer-info">
             <p>SQL to API平台 - 版本 1.0.0</p>
-            <p>© 2024 版权所有</p>
+            <p>© 2025 版权所有</p>
           </div>
         </div>
       </el-scrollbar>

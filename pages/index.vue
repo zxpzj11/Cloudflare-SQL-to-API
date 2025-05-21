@@ -30,9 +30,9 @@
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header>
+        <!-- <el-header>
           <h2>SQL to API - Cloudflare Workers</h2>
-        </el-header>
+        </el-header> -->
         <el-main>
           <el-card>
             <template #header>
@@ -85,7 +85,14 @@
           </el-card>
         </el-main>
         <el-footer>
-          <p>© 2024 SQL to API Platform | Powered by Cloudflare Workers</p>
+          <p>
+            © 2025 SQL to API Platform | Powered by
+            <a
+              href="https://github.com/123xiao/Cloudflare-SQL-to-API"
+              target="_blank"
+              >Cloudflare-SQL-to-API</a
+            >
+          </p>
         </el-footer>
       </el-container>
     </el-container>
