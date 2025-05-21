@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="512" height="512" rx="120" fill="#409EFF"/>
+  
+  <!-- 数据库符号简化版 -->
+  <ellipse cx="200" cy="190" rx="70" ry="35" fill="white" opacity="0.9"/>
+  <path d="M130 190V300C130 319.33 161.34 335 200 335C238.66 335 270 319.33 270 300V190" stroke="white" stroke-width="18" fill="none"/>
+  
+  <!-- 转换箭头 -->
+  <path d="M285 256L370 256" stroke="white" stroke-width="18" stroke-linecap="round"/>
+  <path d="M340 216L380 256L340 296" stroke="white" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg> 

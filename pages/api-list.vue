@@ -1,10 +1,6 @@
 <template>
   <div class="api-list">
-    <el-page-header
-      @back="$router.push('/')"
-      title="返回首页"
-      :content="'API列表'"
-    />
+    <el-page-header @back="$router.go(-1)" title="返回" :content="'API列表'" />
 
     <div class="api-content">
       <div class="api-actions">
@@ -210,11 +206,14 @@
     <el-dialog v-model="requestDetailsVisible" title="请求数据详情" width="50%">
       <pre class="request-details-content">{{ requestDetails }}</pre>
     </el-dialog>
+
+    <!-- 添加页脚组件 -->
+    <AppFooter />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import {
   Refresh,
   Plus,
@@ -224,6 +223,7 @@ import {
 } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { useRouter } from "vue-router";
+import AppFooter from "~/components/AppFooter.vue";
 
 // 路由
 const router = useRouter();
@@ -249,6 +249,9 @@ const requestDetails = ref("");
 
 // 初始化
 onMounted(() => {
+  // 设置页面标题 (确保只在客户端运行)
+  document.title = "SQL to API - API列表";
+
   fetchApiList();
 });
 
@@ -461,10 +464,14 @@ const viewRequestDetails = (requestData: string) => {
 <style scoped>
 .api-list {
   padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .api-content {
   margin-top: 20px;
+  flex: 1;
 }
 
 .api-actions {
@@ -513,5 +520,19 @@ const viewRequestDetails = (requestData: string) => {
   font-family: "Courier New", monospace;
   max-height: 400px;
   overflow-y: auto;
+}
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.el-container {
+  height: 100%;
+}
+
+.footer-wrapper {
+  width: 100%;
 }
 </style>

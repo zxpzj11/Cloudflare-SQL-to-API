@@ -15,6 +15,8 @@ declare module "h3" {
 // Cloudflare Worker 环境类型定义
 interface Env {
   DB: D1Database;
+  ADMIN_USERNAME: string;
+  ADMIN_PASSWORD: string;
 }
 
 export {};

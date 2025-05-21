@@ -51,9 +51,7 @@ CREATE TABLE IF NOT EXISTS api_logs (
     request_data TEXT,
     response_status INTEGER,
     execution_time INTEGER,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (route_id) REFERENCES api_routes(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 初始化一个管理员用户 (密码: admin123)
@@ -144,7 +142,7 @@ VALUES (
     'INSERT INTO products (name, description, price, stock, category) VALUES (:name, :description, :price, :stock, :category) RETURNING id, name', 
     '添加新产品',
     '{"name":{"type":"string","required":true,"description":"产品名称"},"description":{"type":"string","required":false,"description":"产品描述"},"price":{"type":"number","required":true,"description":"产品价格"},"stock":{"type":"number","required":true,"description":"库存数量"},"category":{"type":"string","required":false,"description":"产品类别"}}',
-    FALSE
+    TRUE
 );
 
 -- 示例7: 更新产品（更新操作）
@@ -156,7 +154,7 @@ VALUES (
     'UPDATE products SET name = :name, description = :description, price = :price, stock = :stock, category = :category, updated_at = CURRENT_TIMESTAMP WHERE id = :id RETURNING id, name', 
     '更新产品信息',
     '{"id":{"type":"number","required":true,"description":"产品ID"},"name":{"type":"string","required":true,"description":"产品名称"},"description":{"type":"string","required":false,"description":"产品描述"},"price":{"type":"number","required":true,"description":"产品价格"},"stock":{"type":"number","required":true,"description":"库存数量"},"category":{"type":"string","required":false,"description":"产品类别"}}',
-    FALSE
+    TRUE
 );
 
 -- 示例8: 删除产品（删除操作）
@@ -168,7 +166,7 @@ VALUES (
     'DELETE FROM products WHERE id = :id', 
     '删除指定ID的产品',
     '{"id":{"type":"number","required":true,"description":"要删除的产品ID"}}',
-    FALSE
+    TRUE
 );
 
 -- 示例9: 简单统计（无参数聚合查询）

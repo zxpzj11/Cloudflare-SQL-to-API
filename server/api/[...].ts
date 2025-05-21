@@ -5,6 +5,7 @@ import {
   readBody,
   createError,
 } from "h3";
+import { getClientIP, getCloudflareMeta } from "~/server/utils/cloudflare";
 
 /**
  * 动态路由处理器
@@ -118,25 +119,15 @@ export default defineEventHandler(async (event) => {
     const executionTime = Date.now() - startTime;
 
     try {
-      // 获取IP地址 - 使用多种方式尝试获取最精确的IP
-      const ipAddress =
-        event.context.cloudflare?.request?.headers?.get("CF-Connecting-IP") ||
-        event.context.cloudflare?.request?.headers
-          ?.get("X-Forwarded-For")
-          ?.split(",")[0] ||
-        event.context.cloudflare?.request?.headers?.get("X-Real-IP") ||
-        "未知";
+      // 获取IP地址和Cloudflare元数据
+      const ipAddress = getClientIP(event);
+      const cfMeta = getCloudflareMeta(event);
 
       // 将额外的请求信息添加到日志中
       const requestInfo = {
         ...requestData,
         _requestDetails: {
-          ip: ipAddress,
-          userAgent:
-            event.context.cloudflare?.request?.headers?.get("User-Agent") ||
-            "未知",
-          referer:
-            event.context.cloudflare?.request?.headers?.get("Referer") || "",
+          ...cfMeta,
           requestTime: new Date().toISOString(),
         },
       };
@@ -175,26 +166,16 @@ export default defineEventHandler(async (event) => {
     // 记录错误日志
     const executionTime = Date.now() - startTime;
 
-    // 同样改进错误日志记录中的IP信息获取方式
-    const ipAddress =
-      event.context.cloudflare?.request?.headers?.get("CF-Connecting-IP") ||
-      event.context.cloudflare?.request?.headers
-        ?.get("X-Forwarded-For")
-        ?.split(",")[0] ||
-      event.context.cloudflare?.request?.headers?.get("X-Real-IP") ||
-      "未知";
+    // 使用优化后的方式获取IP地址和Cloudflare元数据
+    const ipAddress = getClientIP(event);
+    const cfMeta = getCloudflareMeta(event);
     const errorStatus = error.statusCode || 500;
 
     // 将额外的请求信息和错误信息添加到日志中
     const requestInfo = {
       ...requestData,
       _requestDetails: {
-        ip: ipAddress,
-        userAgent:
-          event.context.cloudflare?.request?.headers?.get("User-Agent") ||
-          "未知",
-        referer:
-          event.context.cloudflare?.request?.headers?.get("Referer") || "",
+        ...cfMeta,
         requestTime: new Date().toISOString(),
       },
       _error: {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="64" height="64" rx="12" fill="#409EFF"/>
+  
+  <!-- 数据库符号 -->
+  <ellipse cx="24" cy="24" rx="10" ry="5" fill="white"/>
+  <path d="M14 24V40C14 43 18.5 46 24 46C29.5 46 34 43 34 40V24" stroke="white" stroke-width="3" fill="none"/>
+  <path d="M14 32C14 35 18.5 38 24 38C29.5 38 34 35 34 32" stroke="white" stroke-width="2" fill="none"/>
+  
+  <!-- 转换箭头 -->
+  <path d="M36 32L50 32" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44 26L50 32L44 38" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg> 

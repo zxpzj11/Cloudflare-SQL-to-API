@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="16" height="16" rx="3" fill="#409EFF"/>
+  
+  <!-- 极简化数据库符号 -->
+  <ellipse cx="6" cy="6" rx="2.5" ry="1.2" fill="white"/>
+  <path d="M3.5 6V10C3.5 10.8 4.8 11.5 6 11.5C7.2 11.5 8.5 10.8 8.5 10V6" stroke="white" stroke-width="0.7" fill="none"/>
+  
+  <!-- 简化箭头 -->
+  <path d="M9 8L12.5 8" stroke="white" stroke-width="0.7" stroke-linecap="round"/>
+  <path d="M11 6.5L12.5 8L11 9.5" stroke="white" stroke-width="0.7" stroke-linecap="round" fill="none"/>
+</svg> 

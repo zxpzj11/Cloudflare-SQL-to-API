@@ -1,144 +1,151 @@
 <template>
   <div class="api-tester">
     <el-page-header
-      @back="$router.push('/')"
-      title="返回首页"
-      :content="'API测试'"
+      @back="$router.go(-1)"
+      title="返回"
+      :content="'API测试工具'"
     />
 
-    <el-card class="tester-card">
-      <template #header>
-        <div class="card-header">
-          <h3>API测试工具</h3>
-        </div>
-      </template>
-
-      <el-form :model="testForm" label-width="120px">
-        <el-form-item label="选择API">
-          <el-select
-            v-model="testForm.selectedApi"
-            placeholder="选择要测试的API"
-            @change="onApiSelected"
-          >
-            <el-option
-              v-for="api in apiList"
-              :key="api.id"
-              :label="`${api.name} (${api.method} ${api.path})`"
-              :value="api.id"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="请求URL" v-if="testForm.selectedApi">
-          <el-input v-model="testForm.url" disabled />
-        </el-form-item>
-
-        <el-form-item label="HTTP方法" v-if="testForm.selectedApi">
-          <el-tag :type="methodTagType">{{ testForm.method }}</el-tag>
-        </el-form-item>
-
-        <template v-if="testForm.selectedApi && testForm.params.length > 0">
-          <el-divider>参数</el-divider>
-
-          <el-form-item
-            v-for="param in testForm.params"
-            :key="param.name"
-            :label="param.name"
-            :required="param.required"
-          >
-            <el-input
-              v-if="param.type === 'string'"
-              v-model="param.value"
-              :placeholder="`${param.description || '输入参数值'}`"
-            />
-            <el-input-number
-              v-else-if="param.type === 'number'"
-              v-model="param.value"
-              :placeholder="`${param.description || '输入参数值'}`"
-            />
-            <el-switch
-              v-else-if="param.type === 'boolean'"
-              v-model="param.value"
-            />
-            <el-date-picker
-              v-else-if="param.type === 'date'"
-              v-model="param.value"
-              type="date"
-              :placeholder="`${param.description || '选择日期'}`"
-            />
-          </el-form-item>
+    <div class="tester-content">
+      <el-card class="tester-card">
+        <template #header>
+          <div class="card-header">
+            <h3>API测试工具</h3>
+          </div>
         </template>
 
-        <el-form-item v-if="testForm.selectedApi && testForm.method !== 'GET'">
-          <el-divider>请求体 (JSON)</el-divider>
-          <client-only>
-            <div class="editor-container">
-              <div ref="jsonEditorContainer" class="json-editor"></div>
-            </div>
-            <template #fallback>
-              <div class="editor-placeholder">
-                <el-skeleton :rows="5" animated />
-              </div>
-            </template>
-          </client-only>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="sendRequest"
-            :disabled="!testForm.selectedApi"
-          >
-            发送请求
-          </el-button>
-          <el-button @click="resetTest">重置</el-button>
-        </el-form-item>
-      </el-form>
-
-      <el-divider v-if="testForm.selectedApi">响应结果</el-divider>
-
-      <div v-if="response.loading" class="response-loading">
-        <el-skeleton :rows="6" animated />
-      </div>
-
-      <div v-else-if="response.data" class="response-container">
-        <div class="response-meta">
-          <el-descriptions :column="3" border>
-            <el-descriptions-item label="状态">
-              <el-tag
-                :type="
-                  response.status >= 200 && response.status < 300
-                    ? 'success'
-                    : 'danger'
-                "
-              >
-                {{ response.status }}
-              </el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="耗时"
-              >{{ response.time }}ms</el-descriptions-item
+        <el-form :model="testForm" label-width="120px">
+          <el-form-item label="选择API">
+            <el-select
+              v-model="testForm.selectedApi"
+              placeholder="选择要测试的API"
+              @change="onApiSelected"
             >
-            <el-descriptions-item label="大小">{{
-              formatBytes(response.size)
-            }}</el-descriptions-item>
-          </el-descriptions>
+              <el-option
+                v-for="api in apiList"
+                :key="api.id"
+                :label="`${api.name} (${api.method} ${api.path})`"
+                :value="api.id"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="请求URL" v-if="testForm.selectedApi">
+            <el-input v-model="testForm.url" disabled />
+          </el-form-item>
+
+          <el-form-item label="HTTP方法" v-if="testForm.selectedApi">
+            <el-tag :type="methodTagType">{{ testForm.method }}</el-tag>
+          </el-form-item>
+
+          <template v-if="testForm.selectedApi && testForm.params.length > 0">
+            <el-divider>参数</el-divider>
+
+            <el-form-item
+              v-for="param in testForm.params"
+              :key="param.name"
+              :label="param.name"
+              :required="param.required"
+            >
+              <el-input
+                v-if="param.type === 'string'"
+                v-model="param.value"
+                :placeholder="`${param.description || '输入参数值'}`"
+              />
+              <el-input-number
+                v-else-if="param.type === 'number'"
+                v-model="param.value"
+                :placeholder="`${param.description || '输入参数值'}`"
+              />
+              <el-switch
+                v-else-if="param.type === 'boolean'"
+                v-model="param.value"
+              />
+              <el-date-picker
+                v-else-if="param.type === 'date'"
+                v-model="param.value"
+                type="date"
+                :placeholder="`${param.description || '选择日期'}`"
+              />
+            </el-form-item>
+          </template>
+
+          <el-form-item
+            v-if="testForm.selectedApi && testForm.method !== 'GET'"
+          >
+            <el-divider>请求体 (JSON)</el-divider>
+            <client-only>
+              <div class="editor-container">
+                <div ref="jsonEditorContainer" class="json-editor"></div>
+              </div>
+              <template #fallback>
+                <div class="editor-placeholder">
+                  <el-skeleton :rows="5" animated />
+                </div>
+              </template>
+            </client-only>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button
+              type="primary"
+              @click="sendRequest"
+              :disabled="!testForm.selectedApi"
+            >
+              发送请求
+            </el-button>
+            <el-button @click="resetTest">重置</el-button>
+          </el-form-item>
+        </el-form>
+
+        <el-divider v-if="testForm.selectedApi">响应结果</el-divider>
+
+        <div v-if="response.loading" class="response-loading">
+          <el-skeleton :rows="6" animated />
         </div>
 
-        <el-tabs v-model="responseTab" class="response-tabs">
-          <el-tab-pane label="响应数据" name="data">
-            <pre class="response-json">{{
-              JSON.stringify(response.data, null, 2)
-            }}</pre>
-          </el-tab-pane>
-          <el-tab-pane label="响应头" name="headers">
-            <el-table :data="headersData" style="width: 100%">
-              <el-table-column prop="name" label="名称" width="200" />
-              <el-table-column prop="value" label="值" />
-            </el-table>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </el-card>
+        <div v-else-if="response.data" class="response-container">
+          <div class="response-meta">
+            <el-descriptions :column="3" border>
+              <el-descriptions-item label="状态">
+                <el-tag
+                  :type="
+                    response.status >= 200 && response.status < 300
+                      ? 'success'
+                      : 'danger'
+                  "
+                >
+                  {{ response.status }}
+                </el-tag>
+              </el-descriptions-item>
+              <el-descriptions-item label="耗时"
+                >{{ response.time }}ms</el-descriptions-item
+              >
+              <el-descriptions-item label="大小">{{
+                formatBytes(response.size)
+              }}</el-descriptions-item>
+            </el-descriptions>
+          </div>
+
+          <el-tabs v-model="responseTab" class="response-tabs">
+            <el-tab-pane label="响应数据" name="data">
+              <pre class="response-json">{{
+                JSON.stringify(response.data, null, 2)
+              }}</pre>
+            </el-tab-pane>
+            <el-tab-pane label="响应头" name="headers">
+              <el-table :data="headersData" style="width: 100%">
+                <el-table-column prop="name" label="名称" width="200" />
+                <el-table-column prop="value" label="值" />
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </el-card>
+    </div>
+
+    <!-- 添加页脚组件 -->
+    <AppFooter />
   </div>
 </template>
 
@@ -153,8 +160,9 @@ import {
   onUnmounted,
 } from "vue";
 import { ElMessage } from "element-plus";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useNuxtApp } from "#app";
+import AppFooter from "~/components/AppFooter.vue";
 
 // 获取路由
 const route = useRoute();
@@ -203,6 +211,9 @@ const jsonEditor = shallowRef();
 
 // 初始化
 onMounted(async () => {
+  // 设置页面标题 (确保只在客户端运行)
+  document.title = "SQL to API - API测试工具";
+
   await fetchApiList();
 
   // 使用CDN加载Monaco编辑器
@@ -509,6 +520,14 @@ const methodTagType = computed(() => {
 <style scoped>
 .api-tester {
   padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.tester-content {
+  margin-top: 20px;
+  flex: 1;
 }
 
 .tester-card {

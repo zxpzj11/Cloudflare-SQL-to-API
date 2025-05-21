@@ -1,10 +1,6 @@
 <template>
   <div class="docs-page">
-    <el-page-header
-      @back="$router.push('/')"
-      title="返回首页"
-      :content="'使用文档'"
-    />
+    <el-page-header @back="$router.go(-1)" title="返回" :content="'使用文档'" />
 
     <el-card class="docs-card">
       <template #header>
@@ -157,27 +153,42 @@ INSERT INTO users (username, email) VALUES (:username, :email)</pre
           <h3>联系我们</h3>
           <p>如果您有任何问题或建议，请联系我们的支持团队。</p>
 
-          <div class="footer-info">
+          <!-- <div class="footer-info">
             <p>SQL to API平台 - 版本 1.0.0</p>
             <p>© 2025 版权所有</p>
-          </div>
+          </div> -->
         </div>
       </el-scrollbar>
     </el-card>
+
+    <!-- 添加页脚组件 -->
+    <AppFooter />
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+import AppFooter from "~/components/AppFooter.vue";
+
+// 设置页面标题 (确保只在客户端运行)
+onMounted(() => {
+  document.title = "SQL to API - 使用文档";
+});
+
 // 无需额外的逻辑
 </script>
 
 <style scoped>
 .docs-page {
   padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .docs-card {
   margin-top: 20px;
+  flex: 1;
 }
 
 .docs-content {

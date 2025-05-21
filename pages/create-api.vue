@@ -1,9 +1,9 @@
 <template>
   <div class="create-api">
     <el-page-header
-      @back="$router.push('/')"
-      title="返回首页"
-      :content="pageTitle"
+      @back="$router.go(-1)"
+      title="返回"
+      :content="isEditing ? '编辑API' : '创建API'"
     />
 
     <div class="api-content">
@@ -130,13 +130,16 @@
 
         <el-form-item>
           <el-button type="primary" @click="submitForm">{{
-            isEditMode ? "更新API" : "创建API"
+            isEditing ? "更新API" : "创建API"
           }}</el-button>
           <el-button @click="resetForm">重置</el-button>
           <el-button @click="$router.push('/api-list')">查看API列表</el-button>
         </el-form-item>
       </el-form>
     </div>
+
+    <!-- 添加页脚组件 -->
+    <AppFooter />
   </div>
 </template>
 
@@ -156,6 +159,17 @@ import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
 import { useNuxtApp } from "#app";
+import AppFooter from "~/components/AppFooter.vue";
+
+// 編輯模式標誌
+const route = useRoute();
+const isEditing = computed(() => !!route.query.id);
+
+// 编辑模式标志
+const apiId = computed(() => (route.query.id ? Number(route.query.id) : null));
+
+// 页面标题
+const pageTitle = computed(() => (isEditing.value ? "编辑API" : "创建API"));
 
 // Monaco编辑器实例和模块引用
 const monaco = shallowRef();
@@ -166,14 +180,6 @@ const nuxtApp = useNuxtApp();
 
 // 路由
 const router = useRouter();
-const route = useRoute();
-
-// 编辑模式标志
-const isEditMode = computed(() => !!route.query.id);
-const apiId = computed(() => (route.query.id ? Number(route.query.id) : null));
-
-// 页面标题
-const pageTitle = computed(() => (isEditMode.value ? "编辑API" : "创建API"));
 
 // 表单ref
 const apiFormRef = ref<FormInstance>();
@@ -250,10 +256,13 @@ watch(
 
 // 初始化
 onMounted(async () => {
+  // 设置页面标题 (确保只在客户端运行)
+  updatePageTitle();
+
   await fetchApiList();
 
   // 如果是编辑模式，先加载API数据
-  if (isEditMode.value && apiId.value) {
+  if (isEditing.value && apiId.value) {
     await fetchApiDetails(apiId.value);
   }
 
@@ -278,6 +287,16 @@ onMounted(async () => {
     }
   }
 });
+
+// 监听编辑模式变化，更新页面标题
+watch(isEditing, () => {
+  updatePageTitle();
+});
+
+// 更新页面标题
+const updatePageTitle = () => {
+  document.title = `SQL to API - ${isEditing.value ? "编辑API" : "创建API"}`;
+};
 
 // 在组件卸载时清理
 onUnmounted(() => {
@@ -513,7 +532,7 @@ const submitForm = async () => {
         let response;
 
         // 根据模式决定是创建还是更新
-        if (isEditMode.value && apiId.value) {
+        if (isEditing.value && apiId.value) {
           // 更新API
           response = await fetch(`/api/admin/routes/${apiId.value}`, {
             method: "PUT",
@@ -540,7 +559,7 @@ const submitForm = async () => {
 
         if (response.ok) {
           ElMessage.success(
-            isEditMode.value ? "API更新成功！" : "API创建成功！"
+            isEditing.value ? "API更新成功！" : "API创建成功！"
           );
           resetForm();
           // 操作成功后跳转到API列表页面
@@ -548,13 +567,13 @@ const submitForm = async () => {
         } else {
           throw new Error(
             result.statusMessage ||
-              (isEditMode.value ? "更新API失败" : "创建API失败")
+              (isEditing.value ? "更新API失败" : "创建API失败")
           );
         }
       } catch (error: any) {
         ElMessage.error(
           error.message ||
-            (isEditMode.value ? "更新API时发生错误" : "创建API时发生错误")
+            (isEditing.value ? "更新API时发生错误" : "创建API时发生错误")
         );
       }
     } else {
@@ -581,11 +600,14 @@ const resetForm = () => {
 
 <style scoped>
 .create-api {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
 }
 
 .api-content {
-  margin-top: 20px;
+  flex: 1;
 }
 
 .editor-container {

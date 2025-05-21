@@ -1,8 +1,8 @@
 <template>
   <div class="api-logs">
     <el-page-header
-      @back="$router.push('/')"
-      title="返回首页"
+      @back="$router.go(-1)"
+      title="返回"
       :content="'API调用日志'"
     />
 
@@ -280,6 +280,9 @@
       <h4>请求参数</h4>
       <pre class="request-details-content">{{ requestDetails }}</pre>
     </el-dialog>
+
+    <!-- 添加页脚组件 -->
+    <AppFooter />
   </div>
 </template>
 
@@ -292,6 +295,7 @@ import {
   InfoFilled,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import AppFooter from "~/components/AppFooter.vue";
 
 // API路由列表
 const apiRoutes = ref<any[]>([]);
@@ -382,6 +386,9 @@ const dateShortcuts = [
 
 // 初始化
 onMounted(async () => {
+  // 设置页面标题 (确保只在客户端运行)
+  document.title = "SQL to API - API调用日志";
+
   await fetchApiRoutes();
   await fetchLogs();
 });
@@ -619,10 +626,14 @@ const parseClientDetails = (requestData: string) => {
 <style scoped>
 .api-logs {
   padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .logs-content {
   margin-top: 20px;
+  flex: 1;
 }
 
 .filter-card {

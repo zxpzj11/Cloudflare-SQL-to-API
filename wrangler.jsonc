@@ -27,6 +27,18 @@
       "migrations_dir": "./migrations"
     }
   ]
+
+  /**
+   * Environment Variables
+   * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+   *
+   * 注意: 这里仅设置非敏感的环境变量。对于敏感信息如用户名和密码，应使用 `wrangler secret` 命令设置。
+   * 例如: wrangler secret put ADMIN_USERNAME
+   *      wrangler secret put ADMIN_PASSWORD
+   *
+   * 关于Cloudflare Secrets: https://developers.cloudflare.com/workers/platform/environment-variables/#adding-secrets
+   */
+
   /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -38,16 +50,6 @@
    * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
    * databases, object storage, AI inference, real-time communication and more.
    * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-   */
-
-  /**
-   * Environment Variables
-   * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-   */
-  // "vars": { "MY_VARIABLE": "production_value" },
-  /**
-   * Note: Use secrets to store sensitive data.
-   * https://developers.cloudflare.com/workers/configuration/secrets/
    */
 
   /**
