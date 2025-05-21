@@ -2,6 +2,11 @@
 
 这是一个基于 Cloudflare Workers 和 D1 数据库的应用，可以通过编写 SQL 查询快速创建 REST API 接口。
 
+## 在线预览
+
+您可以通过以下链接访问在线演示版本：
+[在线演示版本](https://123406.xyz)
+
 ## 特点
 
 - **简单易用**: 只需编写 SQL 语句，即可发布 REST API
@@ -137,7 +142,3 @@ db-admin-app/
 - **前端**: Vue 3, Nuxt 3, Element Plus, Monaco Editor
 - **后端**: Cloudflare Workers, D1 数据库
 - **构建工具**: Vite, Wrangler
-
-## 许可证
-
-MIT
