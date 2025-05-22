@@ -28,12 +28,59 @@ export default defineEventHandler(async (event) => {
     .first();
 
   console.log(path);
+  console.log(routeResult);
 
   // 如果未找到匹配的路由，返回404
   if (!routeResult) {
     throw createError({
       statusCode: 404,
       statusMessage: "API路由未找到",
+    });
+  }
+
+  // 检查API是否公开
+  if (!routeResult.is_public) {
+    // 记录日志
+    try {
+      const ipAddress = getClientIP(event);
+      const cfMeta = getCloudflareMeta(event);
+
+      // 记录访问非公开API的尝试
+      await env.DB.prepare(
+        `
+        INSERT INTO api_logs 
+          (route_id, ip_address, request_data, response_status, execution_time) 
+        VALUES (?, ?, ?, ?, ?)
+      `
+      )
+        .bind(
+          routeResult.id,
+          ipAddress,
+          JSON.stringify({
+            _requestDetails: {
+              ...cfMeta,
+              requestTime: new Date().toISOString(),
+            },
+            _message: "尝试访问非公开API",
+          }),
+          403,
+          0
+        )
+        .run();
+    } catch (logError) {
+      console.error("记录访问非公开API日志失败:", logError);
+    }
+
+    // 返回友好的错误提示
+    throw createError({
+      statusCode: 403,
+      statusMessage: "访问受限",
+      data: {
+        message: "此API未公开，无法直接访问",
+        apiName: routeResult.name,
+        apiPath: routeResult.path,
+        solution: "请联系管理员将此API设置为公开，或使用授权方式访问",
+      },
     });
   }
 
@@ -101,6 +148,7 @@ export default defineEventHandler(async (event) => {
 
     // 执行SQL查询
     let result;
+    console.log("sqlParams：", sqlParams);
     if (sqlParams.length > 0) {
       // 有参数的查询
       result = await env.DB.prepare(sqlQuery)
