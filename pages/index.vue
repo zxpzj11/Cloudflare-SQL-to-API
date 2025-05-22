@@ -3,9 +3,9 @@
     <div class="main-content">
       <el-container>
         <el-aside width="200px">
-          <div class="menu-header">
+          <!-- <div class="menu-header">
             <h3>管理系统</h3>
-          </div>
+          </div> -->
           <el-menu default-active="/" class="el-menu-vertical" router>
             <el-menu-item index="/">
               <el-icon><el-icon-house /></el-icon>

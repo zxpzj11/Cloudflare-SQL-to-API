@@ -1,7 +1,7 @@
 <template>
   <el-header class="app-header">
     <div class="header-title">
-      <h2>DB Admin - Cloudflare D1</h2>
+      <h2>SQL to API | 数据库API管理系统</h2>
     </div>
     <div class="header-menu">
       <el-menu
@@ -18,7 +18,7 @@
         <el-menu-item index="/docs">文档</el-menu-item>
       </el-menu>
     </div>
-    <div class="header-actions">
+    <!-- <div class="header-actions">
       <a
         href="https://github.com/你的用户名/你的仓库"
         target="_blank"
@@ -27,7 +27,7 @@
       >
         <el-icon><Platform /></el-icon>
       </a>
-    </div>
+    </div> -->
   </el-header>
 </template>
 
