@@ -83,6 +83,8 @@ wrangler d1 create sql_api_db
 
 # 应用数据库迁移
 wrangler d1 execute sql_api_db --file=./migrations/0000_initial_schema.sql
+
+wrangler d1 execute sql_api_db --file=./migrations/0001_table_schema.sql
 ```
 
 ### 部署到 Cloudflare
