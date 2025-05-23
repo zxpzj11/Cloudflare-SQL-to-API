@@ -22,7 +22,7 @@
     {
       "binding": "DB",
       "database_name": "sql_api_db",
-      "database_id": "3ad66142-4649-4deb-86c8-f04d4a6d5702",
+      "database_id": "63d93460-bc33-474f-b09c-f0f074bcc6d7",
       "migrations_table": "d1_migrations",
       "migrations_dir": "./migrations"
     }
